@@ -1,25 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import { Box, TrackballControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import Ground from "./3D_Object/Ground";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Canvas camera={{ position: [0, 50, 50], fov: 30 }}>
+      <pointLight position={[0, 5, 5]} />
+      <Box position={[0, 1, 0]} args={[1, 3]} />
+      <Ground />
+      <TrackballControls />
+    </Canvas>
   );
-}
+};
 
 export default App;
