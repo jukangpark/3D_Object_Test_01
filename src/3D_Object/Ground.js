@@ -1,7 +1,7 @@
 const Ground = () => {
   return (
-    <mesh>
-      <boxGeometry args={[25, 0.1, 25]} />
+    <mesh position={[25, 0, 25]}>
+      <boxGeometry args={[50, 0.5, 50]} />
       <meshStandardMaterial />
     </mesh>
   );
