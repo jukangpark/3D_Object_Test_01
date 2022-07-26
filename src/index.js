@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { createGlobalStyle } from "styled-components";
+import { RecoilRoot } from "recoil";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -12,8 +13,10 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 root.render(
-  <React.StrictMode>
-    <GlobalStyle />
-    <App />
-  </React.StrictMode>
+  <RecoilRoot>
+    <React.StrictMode>
+      <GlobalStyle />
+      <App />
+    </React.StrictMode>
+  </RecoilRoot>
 );
