@@ -2,61 +2,58 @@ import {
   OrthographicCamera,
   PerspectiveCamera,
   TrackballControls,
-  Text,
-  Line,
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import Ground from "./3D_Object/Ground";
-// import Stats from "stats.js";
-import Server from "./3D_Object/Server";
+import Rack from "./3D_Object/Rack";
 import data from "./data";
 import CameraButton from "./components/CameraButton";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { cameraProperty } from "./atoms";
-import { useEffect } from "react";
 import tile from "./tile";
-import ZaxisLine from "./3D_Object/ZaxisLine";
-import XaxisLine from "./3D_Object/XaxisLine";
+import XaxisText from "./3D_Object/text/XaxisText";
+import ZaxisText from "./3D_Object/text/ZaxisText";
+import XaxisLine from "./3D_Object/line/ZaxisLine";
+import ZaxisLine from "./3D_Object/line/XaxisLine";
+import ThemeButton from "./components/ThemeButton";
+import Alarm from "./components/Alarm";
 
 const CanvasContainer = styled.div`
   width: 100%;
   height: 100%;
 `;
 
-// const stats = new Stats();
-// document.body.append(stats.domElement);
-
 const App = () => {
   const [perspectiveCamera, setPerspectiveCamera] =
     useRecoilState(cameraProperty);
 
-  const { width, height, length, padding } = tile;
+  const { xAxisLength, zAxisLength } = tile;
 
-  const tileArray = [];
+  const textXaxisArray = [];
+  const textZaxisArray = [];
+  const lineXaxisArray = [];
+  const lineZaxisArray = [];
 
-  for (let i = 0; i < length + 1; i++) {
+  for (let i = 0; i < xAxisLength + 1; i++) {
     i = "0" + i;
-
-    tileArray.push(i);
+    textXaxisArray.push(i); // 3D text
+    lineZaxisArray.push(Number(i)); // Line 의 좌표값 계산을 위해 Number로 타입 변환
+  }
+  for (let i = 0; i < zAxisLength + 1; i++) {
+    i = "0" + i;
+    textZaxisArray.push(i); // 3D text
+    lineXaxisArray.push(Number(i)); // Line 의 좌표값 계산을 위해 Number로 타입 변환
   }
 
-  // const sizes = {
-  //   width: window.innerWidth,
-  //   height: window.innerHeight,
-  // };
-
-  useEffect(() => {
-    tileArray.map((item) => console.log(item));
-  }, []);
-  // const camera = new Three.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-  // 만약 "03A0409" 라는 좌표데이터가 들어왔을 때 표시해주는 코드
-  // [4,9] => x 좌표 값이 4이고, z 좌표 값이 9인 서버 (Object BOX)
+  lineXaxisArray.push(zAxisLength + 1);
+  lineZaxisArray.push(xAxisLength + 1);
 
   return (
     <CanvasContainer>
+      <ThemeButton />
       <CameraButton />
+      <Alarm />
 
       <Canvas style={{ backgroundColor: "black" }}>
         <PerspectiveCamera
@@ -77,45 +74,29 @@ const App = () => {
         <pointLight position={[0, 5, 5]} />
 
         {data.data.RACK_LIST.map((rack, index) => (
-          <Server
+          <Rack
             key={index}
             surfaceCode={rack.surfaceCode}
             alarmseverity={rack.alarmseverity}
           />
         ))}
 
-        <Server />
+        <Rack />
 
-        {tileArray.map((i, key) => (
-          <Text
-            index={key}
-            color="white"
-            position={[width * i + padding, 3, 0]}
-            fontSize={2}
-            textAlign={"left"}
-          >
-            {i}
-          </Text>
+        {textXaxisArray.map((i, index) => (
+          <XaxisText key={index} i={i} />
         ))}
 
-        {tileArray.map((i, key) => (
-          <Text
-            index={key}
-            color="white"
-            position={[-3, 0, height * i + padding]}
-            fontSize={2}
-            textAlign={"left"}
-          >
-            {"R" + i}
-          </Text>
+        {textZaxisArray.map((i, index) => (
+          <ZaxisText key={index} i={i} />
         ))}
 
-        {tileArray.map((i, key) => (
-          <XaxisLine i={i} key={key} />
+        {lineXaxisArray.map((i, index) => (
+          <XaxisLine key={index} i={i} />
         ))}
 
-        {tileArray.map((i, key) => (
-          <ZaxisLine i={i} key={key} />
+        {lineZaxisArray.map((i, index) => (
+          <ZaxisLine key={index} i={i} />
         ))}
 
         <Ground />

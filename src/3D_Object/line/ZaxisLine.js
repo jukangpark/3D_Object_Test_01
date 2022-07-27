@@ -1,17 +1,17 @@
 import { Line } from "@react-three/drei";
-import tile from "../tile";
+import tile from "../../tile";
 
 const ZaxisLine = ({ i }) => {
-  const { width, height } = tile;
+  const { width, height, xAxisLength } = tile;
 
   return (
     <Line
       points={[
-        [width * i, 0.3, 0],
-        [width * i, 0.3, height * 11],
+        [0, 0.3, height * i],
+        [width * (xAxisLength + 1), 0.3, height * i],
       ]}
       color={"white"}
-      lineWidth={1}
+      lineWidth={0.5}
     />
   );
 };
