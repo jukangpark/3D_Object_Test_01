@@ -7,7 +7,6 @@ import { Canvas } from "@react-three/fiber";
 import Ground from "./3D_Object/Ground";
 import Rack from "./3D_Object/Rack";
 import data from "./data";
-import CameraButton from "./components/CameraButton";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { cameraProperty } from "./atoms";
@@ -16,8 +15,8 @@ import XaxisText from "./3D_Object/text/XaxisText";
 import ZaxisText from "./3D_Object/text/ZaxisText";
 import XaxisLine from "./3D_Object/line/ZaxisLine";
 import ZaxisLine from "./3D_Object/line/XaxisLine";
-import ThemeButton from "./components/ThemeButton";
-import Alarm from "./components/Alarm";
+import { Suspense } from "react";
+import Poiman from "./3D_Object/Poiman";
 
 const CanvasContainer = styled.div`
   width: 100%;
@@ -51,37 +50,37 @@ const App = () => {
 
   return (
     <CanvasContainer>
-      <ThemeButton />
+      {/* <ThemeButton />
       <CameraButton />
-      <Alarm />
+      <Alarm /> */}
 
       <Canvas style={{ backgroundColor: "black" }}>
         <PerspectiveCamera
-          position={[0, 50, 50]}
-          fov={45} // 카메라 절사체 수직 시야, 도 단위로 표시되는 수직 시야이다. 기본값은 50이다.
+          position={[40, 100, 150]}
+          fov={50} // 전방 시야 default는 75
           // aspect={sizes.width / sizes.height} 카메라 절두체 종횡비, 대부분의 경우 화변 너비 / 화면 높이 이다. 기본값은 1 (정사각형 화면)이다.
           makeDefault={perspectiveCamera}
         />
 
         <OrthographicCamera
-          position={[0, 50, 50]}
-          fov={45} // 카메라 절사체 수직 시야, 도 단위로 표시되는 수직 시야이다. 기본값은 50이다.
+          position={[40, 100, 150]}
+          fov={50} // 전방 시야 default는 75
+          zoom={10}
           // aspect={sizes.width / sizes.height} 카메라 절두체 종횡비, 대부분의 경우 화변 너비 / 화면 높이 이다. 기본값은 1 (정사각형 화면)이다.
-          zoom={20}
+
           makeDefault={!perspectiveCamera}
         />
 
-        <pointLight position={[0, 5, 5]} />
-
-        {data.data.RACK_LIST.map((rack, index) => (
-          <Rack
-            key={index}
-            surfaceCode={rack.surfaceCode}
-            alarmseverity={rack.alarmseverity}
-          />
-        ))}
-
-        <Rack />
+        <pointLight position={[100, 200, 100]} />
+        <Suspense fallback={null}>
+          {data.data.RACK_LIST.map((rack, index) => (
+            <Rack
+              key={index}
+              surfaceCode={rack.surfaceCode}
+              alarmseverity={rack.alarmseverity}
+            />
+          ))}
+        </Suspense>
 
         {textXaxisArray.map((i, index) => (
           <XaxisText key={index} i={i} />
@@ -98,11 +97,14 @@ const App = () => {
         {lineZaxisArray.map((i, index) => (
           <ZaxisLine key={index} i={i} />
         ))}
-
+        <Poiman />
         <Ground />
 
         <gridHelper args={[100, 100]} />
         <axesHelper args={[100]} />
+        {/* <Suspense fallback={null}>
+          <TestBox />
+        </Suspense> */}
         <TrackballControls />
       </Canvas>
     </CanvasContainer>

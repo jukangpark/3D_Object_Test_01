@@ -1,16 +1,22 @@
-import * as THREE from "three";
+import { TextureLoader } from "three/src/loaders/TextureLoader";
 import { Box, useCursor } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { useState } from "react";
 import tile from "../tile";
-// import { useSpring } from "@react-spring/three";
-
-// const loader = new THREE.ObjectLoader();
 
 const Rack = ({ surfaceCode, alarmseverity }) => {
-  const { width, height, padding } = tile;
-  const texture = useLoader(THREE.TextureLoader, "/assets/texture/rack.png");
-  // Rack Texture 로 고객사에 맞게 이미지 png 매핑
+  const { width, height } = tile;
+
+  const [texture_1, texture_2, texture_3, texture_4, texture_5, texture_6] =
+    useLoader(TextureLoader, [
+      "/assets/texture/rack3.png",
+      "/assets/texture/rack2.png",
+      "/assets/texture/tile_01.jpg",
+      "/assets/texture/rack2.png",
+      "/assets/texture/rack.png", // 정면
+      "/assets/texture/rack2.png",
+    ]);
+
   const [hovered, setHovered] = useState();
   useCursor(hovered);
   let x = Number(surfaceCode?.slice(6, 7));
@@ -18,36 +24,45 @@ const Rack = ({ surfaceCode, alarmseverity }) => {
 
   let color = null;
 
-  if (alarmseverity === "0") {
-    color = "whitesmoke";
-  } else if (alarmseverity === "1") {
-    color = "yellow";
-  } else if (alarmseverity === "2") {
-    color = "orange";
-  } else if (alarmseverity === "3") {
-    color = "red";
+  switch (alarmseverity) {
+    case "1":
+      color = "yellow";
+      break;
+    case "2":
+      color = "orange";
+      break;
+    case "3":
+      color = "red";
+      break;
+    default:
+      color = "whitesmoke";
+      break;
   }
 
-  // const { scale } = useSpring({ sacle: hovered ? [1.5, 1.5, 1.5] : [2, 5, 2] });
+  // 정육면체에 Texture 매핑을 하려면 이렇게 6면 매핑하면됨.
 
   return (
     <Box
       animated={true}
       position={[
-        x === 1 ? x * (width + padding) : x * width + padding,
+        x === 1 ? x * (width + width / 2) : x * width + width / 2,
         1.5,
-        z === 1 ? z * (height + padding) : z * height + padding,
+        z === 1 ? z * (height + height / 2) : z * height + height / 2,
       ]}
       args={
         hovered
           ? [(width / 2.5) * 1.2, height, (height / 2.5) * 1.2]
           : [width / 2.5, height, height / 2.5]
       }
-      castShadow
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
-      <meshBasicMaterial color={color} map={texture} />
+      <meshStandardMaterial color={color} attach="material-0" map={texture_1} />
+      <meshStandardMaterial color={color} attach="material-1" map={texture_2} />
+      <meshStandardMaterial color={color} attach="material-2" map={texture_3} />
+      <meshStandardMaterial color={color} attach="material-3" map={texture_4} />
+      <meshStandardMaterial color={color} attach="material-4" map={texture_5} />
+      <meshStandardMaterial color={color} attach="material-5" map={texture_6} />
     </Box>
   );
 };

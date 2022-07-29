@@ -3,11 +3,11 @@ import { Text } from "@react-three/drei";
 import tile from "../../tile";
 
 const ZaxisText = ({ i }) => {
-  const { padding, height } = tile;
+  const { height } = tile;
   return (
     <Text
       color="white"
-      position={[-3, 0, height * i + padding]}
+      position={[-3, 0, height * i + height / 2]}
       fontSize={2}
       textAlign={"left"}
     >

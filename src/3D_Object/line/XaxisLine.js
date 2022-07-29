@@ -1,5 +1,4 @@
 import { Line } from "@react-three/drei";
-import { useEffect } from "react";
 import tile from "../../tile";
 
 const XaxisLine = ({ i }) => {
